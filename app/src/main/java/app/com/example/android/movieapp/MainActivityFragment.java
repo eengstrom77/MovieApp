@@ -1,5 +1,7 @@
 package app.com.example.android.movieapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -44,6 +47,16 @@ public class MainActivityFragment extends Fragment {
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_grid);
         gridView.setAdapter(movieAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l){
+                MovieItem movieSelected =  movieAdapter.getItem(position);
+                //Toast.makeText(getActivity(), movieSelected.name, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, movieSelected.name);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -52,13 +65,14 @@ public class MainActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
         FetchMoviesTask moviesTask = new FetchMoviesTask();
-        moviesTask.execute();
+        moviesTask.execute("popularity.desc");
+        //moviesTask.execute("vote_count.desc");
     }
 
-    public class FetchMoviesTask extends AsyncTask<Void, Void, MovieItem[]>{
+    public class FetchMoviesTask extends AsyncTask<String, Void, MovieItem[]>{
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
-        private final String MOVIE_API_KEY = "<insert_personal_api_key_here>";
+        private final String MOVIE_API_KEY = "5505b1ccbf192bd7112bb761020a20ab";
 
         private MovieItem[] getMovieDataFromJson(String mJsonStr, int numMovies)
             throws JSONException {
@@ -66,6 +80,9 @@ public class MainActivityFragment extends Fragment {
             final String DB_RESULTS = "results";
             final String DB_POSTER = "poster_path";
             final String DB_TITLE = "original_title";
+            final String DB_SYNOPSIS = "overview";
+            final String DB_DATE = "release_date";
+            final String DB_RATING = "vote_average";
 
             JSONObject movieJson = new JSONObject(mJsonStr);
             JSONArray movieArray = movieJson.getJSONArray(DB_RESULTS);
@@ -74,11 +91,15 @@ public class MainActivityFragment extends Fragment {
 
             for(int i = 0; i <numMovies; i++){
                 if(i >= movieArray.length()){
-                    movieItems[i]= new MovieItem("Blank "+i, null);
+                    movieItems[i]= new MovieItem("Blank "+i, null, null, null, 0.0);
                 }
                 else {
                     JSONObject movie = movieArray.getJSONObject(i);
-                    movieItems[i] = new MovieItem(movie.getString(DB_TITLE),"http://image.tmdb.org/t/p/w342/"+movie.getString(DB_POSTER));
+                    movieItems[i] = new MovieItem(movie.getString(DB_TITLE),
+                            "http://image.tmdb.org/t/p/w342/"+movie.getString(DB_POSTER),
+                            movie.getString(DB_SYNOPSIS),
+                            movie.getString(DB_DATE),
+                            movie.getDouble(DB_RATING));
                 }
             }
 
@@ -94,7 +115,13 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        protected MovieItem[] doInBackground(Void... params){
+        protected MovieItem[] doInBackground(String... params){
+            if(params.length == 0)
+            {
+                //Undefined Sort - Coding error
+                return null;
+            }
+
             HttpsURLConnection urlConnection = null;
             BufferedReader reader = null;
             String movieJsonStr = null;
@@ -102,7 +129,15 @@ public class MainActivityFragment extends Fragment {
 
             try {
                 // need to break this up to allow different sorts and a way to easily chnage the API Key
-                URL url = new URL("https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key="+MOVIE_API_KEY);
+
+                //"https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key="+MOVIE_API_KEY
+                final String MOVIE_BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+                final String SORT_PARAM = "sort_by";
+                final String API_PARAM = "api_key";
+                Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                        .appendQueryParameter(SORT_PARAM, params[0])
+                        .appendQueryParameter(API_PARAM, MOVIE_API_KEY).build();
+                URL url = new URL(builtUri.toString());
 
                 //Create request to get moves from themoviedb.org
                 urlConnection = (HttpsURLConnection) url.openConnection();

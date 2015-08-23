@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -56,8 +55,8 @@ public class MovieItemAdapter extends ArrayAdapter<MovieItem> {
         }
 
 
-        TextView nameView = (TextView)convertView.findViewById(R.id.movie_text);
-        nameView.setText(movieItem.name);
+        //TextView nameView = (TextView)convertView.findViewById(R.id.movie_text);
+        //nameView.setText(movieItem.name);
 
         return convertView;
     }
