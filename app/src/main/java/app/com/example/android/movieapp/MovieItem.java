@@ -1,9 +1,12 @@
 package app.com.example.android.movieapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by e194715 on 8/20/2015.
  */
-public class MovieItem {
+public class MovieItem implements Parcelable {
     String name;     // title
     String imageUrl; // URL to Movie Poster
     String synopsis; // overview
@@ -18,4 +21,43 @@ public class MovieItem {
         this.date = date;
         this.rating = rating;
     }
+
+    private MovieItem(Parcel in){
+        name = in.readString();
+        imageUrl = in.readString();
+        synopsis = in.readString();
+        date = in.readString();
+        rating = in.readDouble();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    public String toString() {return name + "--"+imageUrl+"--"+synopsis+"--"+date+"--"+rating;}
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(imageUrl);
+        parcel.writeString(synopsis);
+        parcel.writeString(date);
+        parcel.writeDouble(rating);
+    }
+
+    public final Parcelable.Creator<MovieItem>  CREATOR = new Parcelable.Creator<MovieItem>(){
+
+        @Override
+        public MovieItem createFromParcel(Parcel parcel){
+            return new MovieItem(parcel);
+        }
+
+        @Override
+        public MovieItem[] newArray(int i){
+            return new MovieItem[i];
+        }
+
+    };
 }
+

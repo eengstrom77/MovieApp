@@ -32,18 +32,36 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivityFragment extends Fragment {
 
     private MovieItemAdapter movieAdapter;
+    private ArrayList<MovieItem> movieList;
 
     //Constructor
     public MainActivityFragment() {
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState == null || !savedInstanceState.containsKey("movies")){
+            movieList = new ArrayList<MovieItem>(new ArrayList<MovieItem>());
+        }
+        else {
+            movieList = savedInstanceState.getParcelableArrayList("movies");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        outState.putParcelableArrayList("movies", movieList);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //movieAdapter = new MovieItemAdapter(getActivity(), Arrays.asList(movieItems));
-        movieAdapter = new MovieItemAdapter(getActivity(), new ArrayList<MovieItem>());
+        //movieAdapter = new MovieItemAdapter(getActivity(), new ArrayList<MovieItem>());
+        movieAdapter = new MovieItemAdapter(getActivity(),movieList);
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_grid);
         gridView.setAdapter(movieAdapter);
