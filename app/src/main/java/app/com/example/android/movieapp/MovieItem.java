@@ -5,11 +5,11 @@ package app.com.example.android.movieapp;
  */
 public class MovieItem {
     String name;
-    int image; // drawable reference id
+    String imageUrl; // drawable reference id
 
-    public MovieItem(String name, int image)
+    public MovieItem(String name, String imageUrl)
     {
         this.name = name;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 }

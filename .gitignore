@@ -1,5 +1,6 @@
 .gradle
 .DS_Store
+mymovieapikey.txt
 
 # built application files
 *.apk

@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -38,13 +40,21 @@ public class MovieItemAdapter extends ArrayAdapter<MovieItem> {
     public View getView(int position, View convertView, ViewGroup parent){
         MovieItem movieItem = getItem(position);
 
-        //check for new view item - could be a recyled one
+        //check for new view item - could be a recyeled one
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item,
                     parent, false);
         }
         ImageView tileView = (ImageView) convertView.findViewById(R.id.movie_image);
-        tileView.setImageResource(movieItem.image);
+        //tileView.setImageResource(movieItem.image);
+        if( (movieItem.imageUrl != null) || (movieItem.imageUrl == ""))
+        { Picasso.with(getContext())
+                .load(movieItem.imageUrl)
+                .into(tileView);
+        }else {
+            tileView.setImageResource(R.drawable.exampleposterw343);
+        }
+
 
         TextView nameView = (TextView)convertView.findViewById(R.id.movie_text);
         nameView.setText(movieItem.name);
