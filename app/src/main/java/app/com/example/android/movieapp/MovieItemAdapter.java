@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by e194715 on 8/21/2015.
+ * Adapted from Udacity android-custom-arrayadapter project from git hub
  */
 public class MovieItemAdapter extends ArrayAdapter<MovieItem> {
     private static final String LOG_TAG = MovieItemAdapter.class.getSimpleName();

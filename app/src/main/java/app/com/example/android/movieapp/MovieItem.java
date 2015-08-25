@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 /**
  * Created by e194715 on 8/20/2015.
+ *  * Adapted from Udacity android-custom-arrayadapter project from git hub
  */
+
 public class MovieItem implements Parcelable {
     String name;     // title
     String imageUrl; // URL to Movie Poster

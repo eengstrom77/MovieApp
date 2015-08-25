@@ -9,7 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+/**
+ * Adapted from Udacity Android Developer Project Sunshine-Version-2 from Github
+ */
 
 public class MainActivity extends ActionBarActivity {
 

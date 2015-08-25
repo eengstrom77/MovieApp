@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Adapted from Udacity Android Developer Project Sunshine-Version-2 from Github
  */
 public class DetailActivityFragment extends Fragment {
 

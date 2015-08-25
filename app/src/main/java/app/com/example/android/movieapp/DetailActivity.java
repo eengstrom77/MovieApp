@@ -1,4 +1,7 @@
 package app.com.example.android.movieapp;
+/**
+ * Adapted from Udacity Android Developer Project Sunshine-Version-2 from Github
+ */
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

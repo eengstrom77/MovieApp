@@ -27,6 +27,9 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
+/**
+ * Adapted from Udacity Android Developer Project Sunshine-Version-2 from Github
+ */
 
 /**
  * Main activty fragment to display grid of movie posters
@@ -97,7 +100,7 @@ public class MainActivityFragment extends Fragment {
         //moviesTask.execute("vote_count.desc");
     }
 
-    public class FetchMoviesTask extends AsyncTask<String, Void, MovieItem[]>{
+    public class FetchMoviesTask extends AsyncTask<String, Void, MovieItem[]> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
         private final String MOVIE_API_KEY = "<Insert-key-here>";
