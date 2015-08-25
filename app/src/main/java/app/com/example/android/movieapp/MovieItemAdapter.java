@@ -47,8 +47,8 @@ public class MovieItemAdapter extends ArrayAdapter<MovieItem> {
         }
         ImageView tileView = (ImageView) convertView.findViewById(R.id.movie_image);
         //tileView.setImageResource(movieItem.image);
-        if( (movieItem.imageUrl != null) || (movieItem.imageUrl == ""))
-        { Picasso.with(getContext())
+        if( (movieItem.imageUrl != null) || (movieItem.imageUrl == "")) {
+            Picasso.with(getContext())
                 .load("http://image.tmdb.org/t/p/w342/"+movieItem.imageUrl)
                 .into(tileView);
         }else {

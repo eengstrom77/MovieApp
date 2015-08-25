@@ -38,6 +38,7 @@ public class MainActivityFragment extends Fragment {
 
     private MovieItemAdapter movieAdapter;
     private ArrayList<MovieItem> movieList;
+    private String sortString;
 
     //Constructor
     public MainActivityFragment() {
@@ -48,6 +49,15 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(savedInstanceState == null || !savedInstanceState.containsKey("movies")){
             movieList = new ArrayList<MovieItem>(new ArrayList<MovieItem>());
+            FetchMoviesTask moviesTask = new FetchMoviesTask();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String sort_option = prefs.getString(getString(R.string.pref_sort_key),
+                    getString(R.string.pref_sort_popular));
+            moviesTask.execute(sort_option);
+            sortString = sort_option;
+            //moviesTask.execute("popularity.desc");
+            //moviesTask.execute("vote_count.desc");
+
         }
         else {
             movieList = savedInstanceState.getParcelableArrayList("movies");
@@ -91,19 +101,25 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        FetchMoviesTask moviesTask = new FetchMoviesTask();
+
+        // Check if sort option has changed and grab new data if it has
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sort_option = prefs.getString(getString(R.string.pref_sort_key),
                 getString(R.string.pref_sort_popular));
-        moviesTask.execute(sort_option);
-        //moviesTask.execute("popularity.desc");
-        //moviesTask.execute("vote_count.desc");
+        if(!sort_option.equals(sortString)) {
+            FetchMoviesTask moviesTask = new FetchMoviesTask();
+            moviesTask.execute(sort_option);
+            sortString = sort_option;
+        }
+
+
+
     }
 
     public class FetchMoviesTask extends AsyncTask<String, Void, MovieItem[]> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
-        private final String MOVIE_API_KEY = "<Insert-key-here>";
+        private final String MOVIE_API_KEY = "<Insert_key_here>";
 
         private MovieItem[] getMovieDataFromJson(String mJsonStr, int numMovies)
             throws JSONException {
