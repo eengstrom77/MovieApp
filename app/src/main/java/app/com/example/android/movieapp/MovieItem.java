@@ -13,6 +13,15 @@ public class MovieItem implements Parcelable {
     String date;     // release date
     double rating;    // vote average
 
+    public MovieItem()
+    {
+        this.name = "unkown";
+        this.imageUrl = null;
+        this.synopsis = "unkown synopsis";
+        this.date ="??/??/????";
+        this.rating = 0;
+    }
+
     public MovieItem(String name, String imageUrl, String synopsis, String date, double rating)
     {
         this.name = name;
@@ -46,7 +55,7 @@ public class MovieItem implements Parcelable {
         parcel.writeDouble(rating);
     }
 
-    public final Parcelable.Creator<MovieItem>  CREATOR = new Parcelable.Creator<MovieItem>(){
+    public static final Parcelable.Creator<MovieItem>  CREATOR = new Parcelable.Creator<MovieItem>(){
 
         @Override
         public MovieItem createFromParcel(Parcel parcel){

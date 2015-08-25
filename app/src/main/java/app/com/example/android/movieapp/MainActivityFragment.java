@@ -69,9 +69,13 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l){
                 MovieItem movieSelected =  movieAdapter.getItem(position);
+
                 //Toast.makeText(getActivity(), movieSelected.name, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, movieSelected.name);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putParcelable("MovieItem", movieSelected);
+                intent.putExtras(mBundle);
+                //.putExtra("MovieItem", movieSelected);
                 startActivity(intent);
             }
         });
@@ -114,7 +118,7 @@ public class MainActivityFragment extends Fragment {
                 else {
                     JSONObject movie = movieArray.getJSONObject(i);
                     movieItems[i] = new MovieItem(movie.getString(DB_TITLE),
-                            "http://image.tmdb.org/t/p/w342/"+movie.getString(DB_POSTER),
+                            movie.getString(DB_POSTER),
                             movie.getString(DB_SYNOPSIS),
                             movie.getString(DB_DATE),
                             movie.getDouble(DB_RATING));
@@ -157,7 +161,7 @@ public class MainActivityFragment extends Fragment {
                         .appendQueryParameter(API_PARAM, MOVIE_API_KEY).build();
                 URL url = new URL(builtUri.toString());
 
-                //Create request to get moves from themoviedb.org
+                //Create request to get movies from themoviedb.org
                 urlConnection = (HttpsURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
