@@ -1,9 +1,11 @@
 package app.com.example.android.movieapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -87,14 +89,18 @@ public class MainActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
         FetchMoviesTask moviesTask = new FetchMoviesTask();
-        moviesTask.execute("popularity.desc");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sort_option = prefs.getString(getString(R.string.pref_sort_key),
+                getString(R.string.pref_sort_popular));
+        moviesTask.execute(sort_option);
+        //moviesTask.execute("popularity.desc");
         //moviesTask.execute("vote_count.desc");
     }
 
     public class FetchMoviesTask extends AsyncTask<String, Void, MovieItem[]>{
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
-        private final String MOVIE_API_KEY = "5505b1ccbf192bd7112bb761020a20ab";
+        private final String MOVIE_API_KEY = "<Insert-key-here>";
 
         private MovieItem[] getMovieDataFromJson(String mJsonStr, int numMovies)
             throws JSONException {
