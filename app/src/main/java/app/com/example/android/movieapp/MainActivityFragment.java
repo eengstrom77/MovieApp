@@ -119,7 +119,7 @@ public class MainActivityFragment extends Fragment {
     public class FetchMoviesTask extends AsyncTask<String, Void, MovieItem[]> {
 
         private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
-        private final String MOVIE_API_KEY = "<Insert_key_here>";
+        private final String MOVIE_API_KEY = "<Insert_your_key_here>";
 
         private MovieItem[] getMovieDataFromJson(String mJsonStr, int numMovies)
             throws JSONException {
